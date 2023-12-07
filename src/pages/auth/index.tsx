@@ -1,9 +1,9 @@
-import Login from "./login/page";
+import Game from "./game/page";
 
 const routers = [
   {
     path: "",
-    element: <Login />,
+    element: <Game />,
     index: true,
   },
 ];

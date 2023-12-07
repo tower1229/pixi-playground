@@ -733,6 +733,11 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.6.0.tgz#15841505c7ec1648020941d04ca0210f88c59e3a"
   integrity sha512-QqmCsydHS172Y0Kc13bkMXvipbJSvzeglBncJG3LsYJSiPlxYACz7MmJBs4A8l1oU+jfhYEIC/+AUSlvjmiX/g==
 
+"@rwh/keystrokes@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@rwh/keystrokes/-/keystrokes-1.4.0.tgz#9d5efaffbf342e0935359533c56b9901812f1d89"
+  integrity sha512-yOvWnXSDP5zatwFmkGk3K5KADN/2TGne2Eg5hMEA6D/2jNL8H/r1v3zKzi2aNNwNaH7I/exl7vqViwFIKj4paw==
+
 "@svgr/babel-plugin-add-jsx-attribute@8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-8.0.0.tgz#4001f5d5dd87fa13303e36ee106e3ff3a7eb8b22"
