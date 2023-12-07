@@ -12,6 +12,7 @@ import {
   StageHeightCells,
 } from "@/constant";
 import { isOutOfBound } from "./_utils";
+import gameLoop from "./_scripts/play";
 
 export default function Game() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -39,6 +40,8 @@ export default function Game() {
             const TextureName = TypeTextureMap[Map[i][j]];
             const Texture = sheet.textures[TextureName];
             const sprite = new Sprite(Texture);
+            sprite.width = CellSize;
+            sprite.height = CellSize;
             sprite.x = j * CellSize;
             sprite.y = i * CellSize;
             container.addChild(sprite);
@@ -48,8 +51,13 @@ export default function Game() {
       // character
       const TextureRight = sheet.textures["tile_0026"];
       character = new Sprite(TextureRight);
+      character.width = CellSize;
+      character.height = CellSize;
       app.stage.addChild(character);
     });
+
+    //Start the game loop
+    app.ticker.add((delta) => gameLoop(delta));
 
     bindKey("ArrowUp", () => {
       const newVal = character.y - CellSize;
