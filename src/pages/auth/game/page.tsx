@@ -9,7 +9,7 @@ import {
   TextStyle,
 } from "pixi.js";
 // import { renderSpirit } from "./_scripts";
-import { bindKey, unbindKeyCombo } from "@rwh/keystrokes";
+import { bindKey, unbindKey } from "@rwh/keystrokes";
 import {
   StageWidth,
   StageHeight,
@@ -28,6 +28,12 @@ export default function Game() {
   const app = new Application({ width: StageWidth, height: StageHeight });
 
   let character: Sprite;
+  const unbindControl = () => {
+    unbindKey("ArrowUp");
+    unbindKey("ArrowRight");
+    unbindKey("ArrowDown");
+    unbindKey("ArrowLeft");
+  };
 
   useEffect(() => {
     wrapRef.current?.appendChild(app.view as HTMLCanvasElement);
@@ -70,11 +76,34 @@ export default function Game() {
       character.height = CellSize;
       gameScene.addChild(character);
 
-      const handleCollide = (result?: TextureType) => {
-        console.log(1111, result);
+      // game over
+      const gameOverScene = new Container();
+      gameOverScene.visible = false;
+      app.stage.addChild(gameOverScene);
+      let style = new TextStyle({
+        fontFamily: "Futura",
+        fontSize: 64,
+        fill: "white",
+      });
+      const message = new Text("The End!", style);
+      message.x = 180;
+      message.y = app.stage.height / 2 - 32;
+      gameOverScene.addChild(message);
+
+      // game logic
+      const path: { x: number; y: number }[] = [];
+      const handleCollide = (
+        result: TextureType | undefined,
+        position: { x: number; y: number }
+      ) => {
         if (!result) {
+          path.push({ x: position.x / CellSize, y: position.y / CellSize });
           return true;
         } else if (result === 3) {
+          path.push({ x: position.x / CellSize, y: position.y / CellSize });
+          gameOverScene.visible = true;
+          unbindControl?.();
+          console.log(path);
           return true;
         } else {
           return false;
@@ -105,24 +134,8 @@ export default function Game() {
     };
     app.ticker.add(gameLoop);
 
-    const gameOverScene = new Container();
-    gameOverScene.visible = false;
-    app.stage.addChild(gameOverScene);
-    let style = new TextStyle({
-      fontFamily: "Futura",
-      fontSize: 64,
-      fill: "white",
-    });
-    const message = new Text("The End!", style);
-    message.x = 120;
-    message.y = app.stage.height / 2 - 32;
-    gameOverScene.addChild(message);
-
     return () => {
-      unbindKeyCombo("ArrowUp");
-      unbindKeyCombo("ArrowRight");
-      unbindKeyCombo("ArrowDown");
-      unbindKeyCombo("ArrowLeft");
+      unbindControl?.();
     };
   }, []);
 

@@ -48,7 +48,10 @@ export function isCollideType(sprite1: { x: number; y: number }) {
 export const safeMove = (
   point: Sprite,
   direction: "left" | "right" | "up" | "down",
-  callback?: (result?: TextureType) => void
+  callback?: (
+    result: TextureType | undefined,
+    position: { x: number; y: number }
+  ) => void
 ) => {
   let result: TextureType | undefined;
 
@@ -93,7 +96,7 @@ export const safeMove = (
     return null;
   }
 
-  if (callback?.(result)) {
+  if (callback?.(result, newPosition)) {
     point.x = newPosition.x;
     point.y = newPosition.y;
   }
