@@ -5,7 +5,7 @@ export const CellSize = 64 * Scale;
 export const StageWidth = StageWidthCells * CellSize;
 export const StageHeight = StageHeightCells * CellSize;
 
-type TextureType = 0 | 1 | 2 | 3 | 4;
+export type TextureType = 0 | 1 | 2 | 3 | 4;
 export const TypeTextureMap: Record<TextureType, string> = {
   0: "tile_0468.png", // 地面
   1: "tile_0292.png", // 树
