@@ -11,8 +11,8 @@ import {
   StageWidthCells,
   StageHeightCells,
 } from "@/constant";
-import { isOutOfBound } from "./_utils";
-import gameLoop from "./_scripts/play";
+import { safeMove } from "./_utils";
+import play from "./_scripts/play";
 
 export default function Game() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -49,40 +49,38 @@ export default function Game() {
         }
       }
       // character
-      const TextureRight = sheet.textures["tile_0026"];
+      const TextureRight = sheet.textures["tile_0026.png"];
+      const TextureDown = sheet.textures["tile_0024.png"];
+      const TextureLeft = sheet.textures["tile_0023.png"];
+      const TextureUp = sheet.textures["tile_0025.png"];
       character = new Sprite(TextureRight);
       character.width = CellSize;
       character.height = CellSize;
       app.stage.addChild(character);
+
+      bindKey("ArrowUp", () => {
+        character.texture = TextureUp;
+        safeMove(character, "up");
+      });
+      bindKey("ArrowRight", () => {
+        character.texture = TextureRight;
+        safeMove(character, "right");
+      });
+      bindKey("ArrowDown", () => {
+        character.texture = TextureDown;
+        safeMove(character, "down");
+      });
+      bindKey("ArrowLeft", () => {
+        character.texture = TextureLeft;
+        safeMove(character, "left");
+      });
     });
 
     //Start the game loop
-    app.ticker.add((delta) => gameLoop(delta));
-
-    bindKey("ArrowUp", () => {
-      const newVal = character.y - CellSize;
-      if (!isOutOfBound(character.x, newVal)) {
-        character.y = newVal;
-      }
-    });
-    bindKey("ArrowRight", () => {
-      const newVal = character.x + CellSize;
-      if (!isOutOfBound(newVal, character.y)) {
-        character.x = newVal;
-      }
-    });
-    bindKey("ArrowDown", () => {
-      const newVal = character.y + CellSize;
-      if (!isOutOfBound(character.x, newVal)) {
-        character.y = newVal;
-      }
-    });
-    bindKey("ArrowLeft", () => {
-      const newVal = character.x - CellSize;
-      if (!isOutOfBound(newVal, character.y)) {
-        character.x = newVal;
-      }
-    });
+    const gameLoop = (delta: number) => {
+      play(delta);
+    };
+    app.ticker.add(gameLoop);
 
     return () => {
       unbindKeyCombo("ArrowUp");
@@ -92,5 +90,14 @@ export default function Game() {
     };
   }, []);
 
-  return <div ref={wrapRef}></div>;
+  return (
+    <div
+      ref={wrapRef}
+      className="m-auto"
+      style={{
+        width: `${StageWidth}px`,
+        height: `${StageHeight}px`,
+      }}
+    ></div>
+  );
 }
