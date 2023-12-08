@@ -109,6 +109,7 @@ export default function Game() {
           return false;
         }
       };
+      // todo: AnimatedSprite() gotoAndPlay gotoAndStop
       // events
       bindKey("ArrowUp", () => {
         character.texture = TextureUp;
