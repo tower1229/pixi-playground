@@ -13,3 +13,7 @@ body {
 body {
   @apply text-text1;
 }
+
+.wrap {
+  @apply mx-auto max-w-[1200px];
+}

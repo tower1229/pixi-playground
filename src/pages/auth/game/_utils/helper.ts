@@ -6,7 +6,7 @@ import {
   StageWidthCells,
   Map,
   TextureType,
-} from "@/constant";
+} from "./config";
 import { Sprite } from "pixi.js";
 // 检测坐标系中的点是否越界
 export function isOutOfBound(point: { x: number; y: number }) {

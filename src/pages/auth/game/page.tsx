@@ -19,9 +19,10 @@ import {
   StageWidthCells,
   StageHeightCells,
   TextureType,
-} from "@/constant";
-import { safeMove } from "./_utils";
+  safeMove,
+} from "./_utils";
 import play from "./_scripts/play";
+import { Hero } from "./_components/hero";
 
 export default function Game() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -140,14 +141,20 @@ export default function Game() {
     };
   }, []);
 
-  return (
-    <div
-      ref={wrapRef}
-      className="m-auto"
-      style={{
-        width: `${StageWidth}px`,
-        height: `${StageHeight}px`,
-      }}
-    ></div>
+  const isConnect = false;
+
+  return isConnect ? (
+    <div className="wrap">
+      <div
+        ref={wrapRef}
+        className="mx-auto"
+        style={{
+          width: `${StageWidth}px`,
+          height: `${StageHeight}px`,
+        }}
+      ></div>
+    </div>
+  ) : (
+    <Hero />
   );
 }

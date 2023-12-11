@@ -2,10 +2,11 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import svgr from "vite-plugin-svgr";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [react(), svgr(), nodePolyfills()],
   build: {
     outDir: "./dist",
   },
@@ -14,4 +15,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  define: { global: "window" },
 });
