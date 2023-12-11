@@ -1,11 +1,6 @@
-import { AuthCtx } from "@/hooks/ctx/Auth";
-import { useContext } from "react";
-
-import { ButtonEnable, DidInfo } from "@/components";
+import { ButtonEnable } from "@/components";
 
 export const Hero = () => {
-  const { isAuth } = useContext(AuthCtx);
-
   return (
     <div
       className="hero min-h-screen"
@@ -22,7 +17,7 @@ export const Hero = () => {
             In this game, we will show you the concept of zero knowledge proof
             through a maze excaping game. please connect your wallet to play
           </p>
-          {isAuth ? <DidInfo /> : <ButtonEnable />}
+          <ButtonEnable />
         </div>
       </div>
     </div>
