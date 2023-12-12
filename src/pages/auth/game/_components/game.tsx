@@ -1,4 +1,5 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
+import { DidCtx } from "@/hooks/ctx/Did";
 import {
   Application,
   Sprite,
@@ -20,12 +21,14 @@ import {
   StageHeightCells,
   TextureType,
   safeMove,
+  PlaceOfBirth,
 } from "../_utils";
 import play from "../_scripts/play";
 
 export const Game = () => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const app = new Application({ width: StageWidth, height: StageHeight });
+  const { did } = useContext(DidCtx);
 
   let character: Sprite;
   const unbindControl = () => {
@@ -74,6 +77,8 @@ export const Game = () => {
       character = new Sprite(TextureRight);
       character.width = CellSize;
       character.height = CellSize;
+      character.x = PlaceOfBirth.x * CellSize;
+      character.y = PlaceOfBirth.y * CellSize;
       gameScene.addChild(character);
 
       // game over
@@ -142,6 +147,7 @@ export const Game = () => {
 
   return (
     <div className="wrap">
+      <div className="text-center p-4">Your address: {did?.id}</div>
       <div
         ref={wrapRef}
         className="mx-auto"
