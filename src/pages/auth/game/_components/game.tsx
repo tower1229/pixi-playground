@@ -1,16 +1,9 @@
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useEffect, useContext, useState, useCallback } from "react";
 import { DidCtx } from "@/hooks/ctx/Did";
-import {
-  Application,
-  Sprite,
-  Assets,
-  Container,
-  TilingSprite,
-  Text,
-  TextStyle,
-} from "pixi.js";
+import { Application, Sprite, Assets, Container, TilingSprite } from "pixi.js";
 // import { renderSpirit } from "./_scripts";
-import { bindKey, unbindKey } from "@rwh/keystrokes";
+import * as keystrokes from "@rwh/keystrokes";
+import { Keystrokes } from "@rwh/keystrokes";
 import {
   StageWidth,
   StageHeight,
@@ -22,21 +15,19 @@ import {
   TextureType,
   safeMove,
   PlaceOfBirth,
+  Step,
 } from "../_utils";
 import play from "../_scripts/play";
+import { GameOver } from "./GameOver";
 
 export const Game = () => {
   const wrapRef = useRef<HTMLDivElement>(null);
   const app = new Application({ width: StageWidth, height: StageHeight });
   const { did } = useContext(DidCtx);
-
-  let character: Sprite;
-  const unbindControl = () => {
-    unbindKey("ArrowUp");
-    unbindKey("ArrowRight");
-    unbindKey("ArrowDown");
-    unbindKey("ArrowLeft");
-  };
+  const { bindKey } = keystrokes as unknown as Keystrokes;
+  const [gameIsOver, setGameOver] = useState(false);
+  const [path, setPath] = useState<Step[]>([]);
+  const [character, setCharacter] = useState<Sprite>();
 
   useEffect(() => {
     wrapRef.current?.appendChild(app.view as HTMLCanvasElement);
@@ -74,41 +65,30 @@ export const Game = () => {
       const TextureDown = sheet.textures["tile_0024.png"];
       const TextureLeft = sheet.textures["tile_0023.png"];
       const TextureUp = sheet.textures["tile_0025.png"];
-      character = new Sprite(TextureRight);
-      character.width = CellSize;
-      character.height = CellSize;
-      character.x = PlaceOfBirth.x * CellSize;
-      character.y = PlaceOfBirth.y * CellSize;
-      gameScene.addChild(character);
 
-      // game over
-      const gameOverScene = new Container();
-      gameOverScene.visible = false;
-      app.stage.addChild(gameOverScene);
-      let style = new TextStyle({
-        fontFamily: "Futura",
-        fontSize: 64,
-        fill: "white",
-      });
-      const message = new Text("The End!", style);
-      message.x = 180;
-      message.y = app.stage.height / 2 - 32;
-      gameOverScene.addChild(message);
-
+      const _character = new Sprite(TextureRight);
+      _character.width = CellSize;
+      _character.height = CellSize;
+      _character.x = PlaceOfBirth.x * CellSize;
+      _character.y = PlaceOfBirth.y * CellSize;
+      gameScene.addChild(_character);
+      setCharacter(_character);
       // game logic
-      const path: { x: number; y: number }[] = [];
+      const path: Step[] = [];
       const handleCollide = (
         result: TextureType | undefined,
-        position: { x: number; y: number }
+        position: Step
       ) => {
-        if (!result) {
+        if (result === 0) {
           path.push({ x: position.x / CellSize, y: position.y / CellSize });
           return true;
         } else if (result === 3) {
-          path.push({ x: position.x / CellSize, y: position.y / CellSize });
-          gameOverScene.visible = true;
-          unbindControl?.();
-          console.log(path);
+          setGameOver(true);
+          setPath([
+            ...path,
+            { x: position.x / CellSize, y: position.y / CellSize },
+          ]);
+          path.length = 0;
           return true;
         } else {
           return false;
@@ -117,45 +97,56 @@ export const Game = () => {
       // todo: AnimatedSprite() gotoAndPlay gotoAndStop
       // events
       bindKey("ArrowUp", () => {
-        character.texture = TextureUp;
-        safeMove(character, "up", handleCollide);
+        if (gameIsOver) return;
+        _character.texture = TextureUp;
+        safeMove(_character, "up", handleCollide);
       });
       bindKey("ArrowRight", () => {
-        character.texture = TextureRight;
-        safeMove(character, "right", handleCollide);
+        if (gameIsOver) return;
+        _character.texture = TextureRight;
+        safeMove(_character, "right", handleCollide);
       });
       bindKey("ArrowDown", () => {
-        character.texture = TextureDown;
-        safeMove(character, "down", handleCollide);
+        if (gameIsOver) return;
+        _character.texture = TextureDown;
+        safeMove(_character, "down", handleCollide);
       });
       bindKey("ArrowLeft", () => {
-        character.texture = TextureLeft;
-        safeMove(character, "left", handleCollide);
+        if (gameIsOver) return;
+        _character.texture = TextureLeft;
+        safeMove(_character, "left", handleCollide);
       });
     });
 
     //Start the game loop
     const gameLoop = (delta: number) => {
-      play(delta, character);
+      character && play(delta, character);
     };
     app.ticker.add(gameLoop);
-
-    return () => {
-      unbindControl?.();
-    };
   }, []);
+
+  const reStartGame = useCallback(() => {
+    setGameOver(false);
+    setPath([]);
+    if (character) {
+      character.x = PlaceOfBirth.x * CellSize;
+      character.y = PlaceOfBirth.y * CellSize;
+    }
+  }, [character]);
 
   return (
     <div className="wrap">
       <div className="text-center p-4">Your address: {did?.id}</div>
       <div
         ref={wrapRef}
-        className="mx-auto"
+        className="mx-auto relative"
         style={{
           width: `${StageWidth}px`,
           height: `${StageHeight}px`,
         }}
-      ></div>
+      >
+        {gameIsOver && <GameOver path={path} onExit={reStartGame} />}
+      </div>
     </div>
   );
 };

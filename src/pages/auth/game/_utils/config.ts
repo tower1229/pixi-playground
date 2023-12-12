@@ -11,7 +11,7 @@ export const TypeTextureMap: Record<TextureType, string> = {
   1: "tile_0292.png", // 树
   2: "tile_0248.png", // 路障
   3: "tile_0417.png", // 门
-  4: "tile_0373.png", // 特殊
+  4: "tile_0373.png", // 红树
 };
 
 export const Map: TextureType[][] = [
@@ -27,7 +27,12 @@ export const Map: TextureType[][] = [
   [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
 ];
 
-export const PlaceOfBirth = {
+export type Step = {
+  x: number;
+  y: number;
+};
+
+export const PlaceOfBirth: Step = {
   x: 0,
   y: 9,
 };

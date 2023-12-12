@@ -1,5 +1,5 @@
-import { Hero } from "./_components/hero";
-import { Game } from "./_components/game";
+import { Hero } from "./_components/Hero";
+import { Game } from "./_components/Game";
 
 import { AuthCtx } from "@/hooks/ctx/Auth";
 import { useContext } from "react";

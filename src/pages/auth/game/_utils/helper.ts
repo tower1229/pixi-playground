@@ -30,8 +30,8 @@ export function isCollide(sprite1: Sprite, sprite2: Sprite) {
 
 // 特定类型碰撞检测
 export function isCollideType(sprite1: { x: number; y: number }) {
-  let { x, y } = sprite1;
-  let result;
+  const { x, y } = sprite1;
+  let result: TextureType = 0;
   for (let i = 0; i < StageHeightCells; i++) {
     for (let j = 0; j < StageWidthCells; j++) {
       if (Map[i][j] > 0) {
@@ -48,12 +48,9 @@ export function isCollideType(sprite1: { x: number; y: number }) {
 export const safeMove = (
   point: Sprite,
   direction: "left" | "right" | "up" | "down",
-  callback?: (
-    result: TextureType | undefined,
-    position: { x: number; y: number }
-  ) => void
+  callback?: (result: TextureType, position: { x: number; y: number }) => void
 ) => {
-  let result: TextureType | undefined;
+  let result: TextureType;
 
   const step = 1;
   const { x, y } = point;
@@ -87,10 +84,7 @@ export const safeMove = (
       break;
   }
 
-  const isCollideTypeResult = isCollideType(newPosition);
-  if (isCollideTypeResult) {
-    result = isCollideTypeResult;
-  }
+  result = isCollideType(newPosition);
 
   if (isOutOfBound(newPosition)) {
     return null;
