@@ -36,9 +36,8 @@ export const GameOver = ({
         </pre>
 
         <div className="w-full px-4 mt-4 text-center">
-          <button className="btn btn-sm rounded-none ">My ZKP</button>
           <button className="btn btn-sm rounded-none btn-success ">
-            My Achievements
+            TransactionHash
           </button>
           <button
             className="btn btn-sm rounded-none btn-error text-white"

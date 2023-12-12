@@ -1,7 +1,8 @@
 import React, { createContext, useReducer, useContext } from "react";
 
 type StoreType = {
-  count: number;
+  moving: boolean;
+  direction: "left" | "right" | "up" | "down";
 };
 
 type StoreDispatch = {
@@ -9,17 +10,37 @@ type StoreDispatch = {
   param?: Record<string, unknown>;
 };
 
-const initialState: StoreType = { count: 0 };
+const initialState: StoreType = { moving: false, direction: "right" };
 
 function reducer(state: StoreType, action: StoreDispatch) {
+  const result: StoreType = { ...state };
+
   switch (action.type) {
-    case "increment":
-      return { count: state.count + 1 };
-    case "decrement":
-      return { count: state.count - 1 };
+    case "move.left":
+      result.moving = true;
+      result.direction = "left";
+      break;
+    case "move.right":
+      result.moving = true;
+      result.direction = "right";
+      break;
+    case "move.up":
+      result.moving = true;
+      result.direction = "up";
+      break;
+    case "move.down":
+      result.moving = true;
+      result.direction = "down";
+      break;
+    case "move.stop":
+      result.moving = false;
+      result.direction = state.direction;
+      break;
+
     default:
       throw new Error();
   }
+  return result;
 }
 
 const StateContext = createContext(initialState);

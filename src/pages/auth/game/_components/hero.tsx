@@ -1,6 +1,9 @@
-import { ButtonEnable } from "@/components";
+// import { ButtonEnable } from "@/components";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 export const Hero = () => {
+  const { open } = useWeb3Modal();
+
   return (
     <div
       className="hero min-h-screen"
@@ -16,7 +19,10 @@ export const Hero = () => {
             In this game, we will show you the concept of zero knowledge proof
             through a maze excaping game. please connect your wallet to play
           </p>
-          <ButtonEnable />
+          {/* <ButtonEnable /> */}
+          <button className="btn btn-primary" onClick={() => open()}>
+            Connect Wallet to Play
+          </button>
         </div>
       </div>
     </div>

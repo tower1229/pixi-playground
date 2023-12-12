@@ -1,11 +1,10 @@
 import { Hero } from "./_components/Hero";
 import { Game } from "./_components/Game";
 
-import { AuthCtx } from "@/hooks/ctx/Auth";
-import { useContext } from "react";
+import { useAccount } from "wagmi";
 
 export default function GamePage() {
-  const { isAuth } = useContext(AuthCtx);
+  const { isDisconnected } = useAccount();
 
-  return isAuth ? <Game /> : <Hero />;
+  return isDisconnected ? <Game /> : <Hero />;
 }

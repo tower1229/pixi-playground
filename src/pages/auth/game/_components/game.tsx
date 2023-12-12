@@ -1,5 +1,4 @@
-import { useRef, useEffect, useContext, useState, useCallback } from "react";
-import { DidCtx } from "@/hooks/ctx/Did";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { Application, Sprite, Assets, Container, TilingSprite } from "pixi.js";
 // import { renderSpirit } from "./_scripts";
 import * as keystrokes from "@rwh/keystrokes";
@@ -19,15 +18,17 @@ import {
 } from "../_utils";
 import play from "../_scripts/play";
 import { GameOver } from "./GameOver";
+import { useDisconnect, useAccount } from "wagmi";
 
 export const Game = () => {
+  const { disconnect } = useDisconnect();
   const wrapRef = useRef<HTMLDivElement>(null);
   const app = new Application({ width: StageWidth, height: StageHeight });
-  const { did } = useContext(DidCtx);
   const { bindKey } = keystrokes as unknown as Keystrokes;
   const [gameIsOver, setGameOver] = useState(false);
   const [path, setPath] = useState<Step[]>([]);
   const [character, setCharacter] = useState<Sprite>();
+  const { address, isDisconnected } = useAccount();
 
   useEffect(() => {
     wrapRef.current?.appendChild(app.view as HTMLCanvasElement);
@@ -136,7 +137,18 @@ export const Game = () => {
 
   return (
     <div className="wrap">
-      <div className="text-center p-4">Your address: {did?.id}</div>
+      <div className="text-center p-4">
+        Your address: {isDisconnected}
+        {address}
+        <button
+          className="btn btn-warning"
+          onClick={() => {
+            disconnect();
+          }}
+        >
+          Logout
+        </button>
+      </div>
       <div
         ref={wrapRef}
         className="mx-auto relative"
