@@ -1,13 +1,18 @@
 import Layout from "@/pages/layouts/Layout";
 
 import NoFound from "./no-found/page";
-import authRoutes from "./auth";
+import Game from "./game/page";
 
 const rootRouter = [
   {
     path: "/",
     element: <Layout />,
-    children: [...authRoutes],
+    children: [
+      {
+        element: <Game />,
+        index: true,
+      },
+    ],
   },
   {
     path: "*",
