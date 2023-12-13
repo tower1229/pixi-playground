@@ -28,7 +28,7 @@ export const Game = () => {
   const [gameIsOver, setGameOver] = useState(false);
   const [path, setPath] = useState<Step[]>([]);
   const [character, setCharacter] = useState<Sprite>();
-  const { address, isDisconnected } = useAccount();
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
     wrapRef.current?.appendChild(app.view as HTMLCanvasElement);
@@ -138,7 +138,7 @@ export const Game = () => {
   return (
     <div className="wrap">
       <div className="text-center p-4">
-        Your address: {isDisconnected}
+        Your address:
         {address}
         <button
           className="btn btn-warning"

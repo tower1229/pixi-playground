@@ -4,7 +4,6 @@ import { Game } from "./_components/Game";
 import { useAccount } from "wagmi";
 
 export default function GamePage() {
-  const { isDisconnected } = useAccount();
-
-  return isDisconnected ? <Game /> : <Hero />;
+  const { isConnected } = useAccount();
+  return isConnected ? <Game /> : <Hero />;
 }

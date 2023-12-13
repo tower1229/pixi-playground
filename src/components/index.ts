@@ -1,6 +1,4 @@
-import DidInfo from "./DidInfo";
-import ButtonEnable from "./ButtonEnable";
 import Dialog from "./Dialog";
-export { default as UploadKeysfile } from "./upload/UploadKeysfile";
+import Address from "./Address";
 
-export { ButtonEnable, DidInfo, Dialog };
+export { Address, Dialog };
