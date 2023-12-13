@@ -13,6 +13,7 @@
   "dependencies": {
     "@rwh/keystrokes": "^1.4.0",
     "@web3modal/wagmi": "^3.4.0",
+    "axios": "^1.6.2",
     "daisyui": "^4.4.19",
     "pixi.js": "7.3.2",
     "react": "^18.2.0",
