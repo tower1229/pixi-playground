@@ -2,6 +2,7 @@ import Layout from "@/pages/layouts/Layout";
 
 import NoFound from "./no-found/page";
 import Game from "./game/page";
+import FishPond from "./fish-pond/page";
 
 const rootRouter = [
   {
@@ -9,8 +10,12 @@ const rootRouter = [
     element: <Layout />,
     children: [
       {
+        path: "game",
         element: <Game />,
-        index: true,
+      },
+      {
+        path: "fish-pond",
+        element: <FishPond />,
       },
     ],
   },
